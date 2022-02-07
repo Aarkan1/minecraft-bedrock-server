@@ -375,6 +375,8 @@ downloadServerIfNotExists(platform)
                         if (hasSentStopCommand) {
                             clearInterval(saveQueryInterval);
                             clearInterval(saveHoldInterval);
+                            clearTimeout(dailyBackupTimeout);
+                            clearInterval(dailyBackupInterval);
                             bs.stdin.write("stop\r\n");
                             setTimeout(async () => {
                                 await deleteLockFileIfExists();
@@ -414,6 +416,20 @@ downloadServerIfNotExists(platform)
                 backupFrequencyMS,
                 BACKUP_TYPES.SCHEDULED
             );
+
+            let to = new Date();
+            to.setHours(23,59,0,0);
+            let from = Date.now();
+            let diffTo12 = to - from;
+            
+            let dailyBackupInterval;
+            const dailyBackupTimeout = setTimeout(() => {
+                dailyBackupInterval = setInterval(
+                    triggerBackup,
+                    24*60*60*1000,  // every 24 hours
+                    BACKUP_TYPES.DAILY
+                );
+            }, diffTo12); // start interval at 23:59
 
             const printResourceUsage = () => {
                 if (bs != null) {

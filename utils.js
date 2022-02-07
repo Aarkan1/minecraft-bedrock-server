@@ -56,7 +56,8 @@ const BACKUP_TYPES = Object.freeze({
   'SCHEDULED': 'SCHEDULED',
   'MANUAL': 'MANUAL',
   'ON_STOP': 'ON_STOP',
-  'ON_FORCED_STOP':'ON_FORCED_STOP'
+  'ON_FORCED_STOP':'ON_FORCED_STOP',
+  "DAILY": "DAILY"
 });
 const BACKUP_TYPE_REGEX_FRAGMENT = `(${Object.keys(BACKUP_TYPES).join('|')})`;
 

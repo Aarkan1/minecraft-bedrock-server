@@ -28,4 +28,4 @@ bedrock-server-*.zip
 backups/*.zip
 
 # Config file
-config.json
+# config.json

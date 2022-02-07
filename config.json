@@ -1,15 +1,8 @@
-// Rename this file to 'config.json' and delete this comment before starting
-//
-// See bedrock_server_how_to.html for more detailed information about what
-// each of the fields in "server-properties" do
-//
-// Delete all the lines not below this one
-
 {
-  "accept-official-minecraft-server-eula": false,
+  "accept-official-minecraft-server-eula": true,
   "minecraft-server-version": "1.18.2.03",
   "server-properties": {
-    "server-name": "Dedicated Node S3 Server",
+    "server-name": "Dedicated Node Server",
     "gamemode": "survival",
     "difficulty": "normal",
     "allow-cheats": false,
@@ -22,7 +15,7 @@
     "tick-distance": 4,
     "player-idle-timeout": 30,
     "max-threads": 8,
-    "level-name": "My Cool Level",
+    "level-name": "Aliceum",
     "level-seed": null,
     "default-player-permission-level": "member",
     "texturepack-required": false,
@@ -35,8 +28,8 @@
     "correct-player-movement": false
   },
   "ui": {
-    "enabled": false,
-    "port": 3000,
+    "enabled": true,
+    "port": 3500,
     "admin-code-sha256-hash": "replace-this-with-the-sha256-hash-of-your-admin-code"
   },
   "backup": {
@@ -44,10 +37,11 @@
     "use-aws-s3-backup": false,
     "num-backups-to-keep-for-type": {
       "local": {
-        "SCHEDULED": 20,
+        "SCHEDULED": 30,
         "MANUAL": -1,
         "ON_STOP": 30,
-        "ON_FORCED_STOP": -1
+        "ON_FORCED_STOP": -1,
+        "DAILY": 30
       },
       "remote": {
         "SCHEDULED": 15,
