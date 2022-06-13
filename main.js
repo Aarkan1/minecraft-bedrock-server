@@ -17,6 +17,7 @@ const {
     BACKUP_TYPES,
     MS_IN_MIN,
     MS_IN_SEC,
+    MS_IN_HOUR,
     BUCKET_LOCK_FILE_NAME,
     formatBytes,
     platform
@@ -418,7 +419,7 @@ downloadServerIfNotExists(platform)
 
             let dailyBackupInterval = setInterval(
                 triggerBackup,
-                (24*60*60*1000),  // every 24 hours
+                24 * MS_IN_HOUR,  // every 24 hours
                 BACKUP_TYPES.DAILY
             );
 
