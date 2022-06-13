@@ -285,15 +285,15 @@ if ((uiConfig || {}).enabled) {
     });
     
     router.post('/update-server', (req, res) => {
+        const body = req.body;
         if (clientHashIsValid(req.header("Authorization"))) {
-            const body = req.body;
             const currentVersion = config['minecraft-server-version']
             if(body.version != currentVersion) {
                 console.warn('New bedrock server version available');
                 console.warn(body);
-                // config['minecraft-server-version'] = body.version
-                // fs.writeFileSync('./config.json', JSON.stringify(config, null, 2))
-                // execSync('pm2 restart bedrock-server')
+                config['minecraft-server-version'] = body.version
+                fs.writeFileSync('./config.json', JSON.stringify(config, null, 2))
+                execSync('pm2 restart bedrock-server')
             }
             res.sendStatus(200);
         } else {
