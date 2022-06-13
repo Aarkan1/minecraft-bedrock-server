@@ -6,7 +6,8 @@ const {
 } = require("stream");
 const readline = require("readline");
 let {
-    spawn
+    spawn,
+    execSync
 } = require("child_process");
 const pidusage = require("pidusage");
 const express = require("express");
@@ -281,6 +282,26 @@ if ((uiConfig || {}).enabled) {
     router.get("/backup-size-list", async (req, res) => {
         const backups = await getBackupSizeList();
         res.send(backups);
+    });
+    
+    router.post('/update-server', (req, res) => {
+        if (clientHashIsValid(req.header("Authorization"))) {
+            const body = req.body;
+            const currentVersion = config['minecraft-server-version']
+            if(body.version != currentVersion) {
+                console.warn('New bedrock server version available');
+                console.warn(body);
+                // config['minecraft-server-version'] = body.version
+                // fs.writeFileSync('./config.json', JSON.stringify(config, null, 2))
+                // execSync('pm2 restart bedrock-server')
+            }
+            res.sendStatus(200);
+        } else {
+            console.log(
+                `Rejected unauthorized request to update server version to ${body.version}`
+            );
+            res.sendStatus(401);
+        }
     });
 
     expressApp.use("/", router);
