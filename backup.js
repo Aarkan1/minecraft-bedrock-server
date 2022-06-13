@@ -151,7 +151,7 @@ async function restoreLatestLocalBackup() {
     return ts2 - ts1;
   });
   const restorableArchives = allArchives.filter(
-    fileName => !fileName.includes(BACKUP_TYPES.ON_FORCED_STOP)
+    fileName => fileName.includes(BACKUP_TYPES.SCHEDULED)
   );
   const numForceStopArchives = allArchives.length - restorableArchives.length;
   if (numForceStopArchives > 0) {
