@@ -293,7 +293,7 @@ if ((uiConfig || {}).enabled) {
                 console.warn(body);
                 config['minecraft-server-version'] = body.version
                 fs.writeFileSync('./config.json', JSON.stringify(config, null, 2))
-                execSync('pm2 restart bedrock-server')
+                execSync('pm2 restart mc-server')
             }
             res.sendStatus(200);
         } else {
