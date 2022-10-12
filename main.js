@@ -113,6 +113,14 @@ let salt = crypto
     .toString("hex")
     .toUpperCase();
 
+import('./update-server/index.js').then(getServerVersion => {
+    const updateServer = async () => {
+        getServerVersion.version(config);
+    }
+    
+    setInterval(updateServer, 30 * MS_IN_MIN)
+})
+
 const uiConfig = config.ui;
 if ((uiConfig || {}).enabled) {
     console.log("Starting express server");
