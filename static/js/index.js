@@ -131,6 +131,9 @@ function refreshServerResourceUsageInfo() {
                     Math.round(stats.elapsed / 1000)
                 )} (hh:mm:ss)`
             );
+            statsText.push(
+                `Server version: ${stats.version}`
+            );
             document.getElementById(
                 "server-resource-usage-text"
             ).innerHTML = statsText.join("\n");

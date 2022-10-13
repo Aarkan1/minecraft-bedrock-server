@@ -159,7 +159,8 @@ if ((uiConfig || {}).enabled) {
                     result = {
                         cpu: stats.cpu,
                         elapsed: stats.elapsed,
-                        memory: stats.memory
+                        memory: stats.memory,
+                        version: config['minecraft-server-version']
                     };
                 }
                 res.send(result);
