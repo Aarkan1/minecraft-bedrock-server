@@ -55,6 +55,7 @@ function updateCurrentAdminCodeHash() {
 const interactionButtons = [
     "toggle-restore-backup-controls-button",
     "stop-server-button",
+    "trigger-manual-version-update-button",
     "trigger-manual-backup-button",
     "print-resource-usage-button",
     "print-player-list-button",
@@ -181,6 +182,29 @@ function stopServer() {
             xhr.send(JSON.stringify({}));
             xhr.onload = () => {
                 setSelectedBackup(null);
+                enableInteraction();
+            };
+        });
+}
+
+function triggerManualVersionUpdate() {
+    disableInteraction();
+    fetch("/salt")
+        .then(response => response.text())
+        .then(salt => {
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/trigger-manual-version-update", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.setRequestHeader(
+                "Authorization",
+                sjcl.codec.hex.fromBits(
+                    sjcl.hash.sha256.hash(
+                        inputAdminCodeHash + salt.toUpperCase()
+                    )
+                )
+            );
+            xhr.send(JSON.stringify({}));
+            xhr.onload = () => {
                 enableInteraction();
             };
         });
@@ -351,6 +375,10 @@ document
 document
     .getElementById("stop-server-button")
     .addEventListener("click", stopServer);
+
+document
+    .getElementById("trigger-manual-version-update-button")
+    .addEventListener("click", triggerManualVersionUpdate);
 
 document
     .getElementById("trigger-manual-backup-button")

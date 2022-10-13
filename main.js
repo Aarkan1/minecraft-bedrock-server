@@ -115,6 +115,7 @@ let salt = crypto
 
 import('./update-server/index.js').then(getServerVersion => {
     const updateServer = async () => {
+        console.log("<br>Looking for new server version...<br>")
         getServerVersion.version(config);
     }
     
@@ -203,6 +204,31 @@ if ((uiConfig || {}).enabled) {
         }, UI_COMMAND_DELAY);
     });
 
+    router.post("/trigger-manual-version-update", (req, res) => {
+        const {
+            body
+        } = req;
+        const {
+            adminCodeHash
+        } = {
+            body
+        };
+        setTimeout(() => {
+            if (clientHashIsValid(req.header("Authorization"))) {
+                import('./update-server/index.js').then(getServerVersion => {
+                    console.log("<br>Looking for new server version...<br>")
+                    getServerVersion.version(config);
+                })
+                res.sendStatus(200);
+            } else {
+                console.log(
+                    "Rejected unauthorized request to trigger manual backup"
+                );
+                res.sendStatus(401);
+            }
+        }, UI_COMMAND_DELAY);
+    });
+    
     router.post("/trigger-manual-backup", (req, res) => {
         const {
             body
