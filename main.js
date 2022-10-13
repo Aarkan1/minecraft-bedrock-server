@@ -115,7 +115,7 @@ let salt = crypto
 
 import('./update-server/index.js').then(getServerVersion => {
     const updateServer = async () => {
-        console.log("<br>Looking for new server version...<br>")
+        console.log("\nLooking for new server version...\n")
         getServerVersion.version(config);
     }
     
@@ -216,7 +216,7 @@ if ((uiConfig || {}).enabled) {
         setTimeout(() => {
             if (clientHashIsValid(req.header("Authorization"))) {
                 import('./update-server/index.js').then(getServerVersion => {
-                    console.log("<br>Looking for new server version...<br>")
+                    console.log("\nLooking for new server version...\n")
                     getServerVersion.version(config);
                 })
                 res.sendStatus(200);
