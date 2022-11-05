@@ -113,13 +113,13 @@ let salt = crypto
     .toString("hex")
     .toUpperCase();
 
-const updateServer = require('./update-server/index.js')
-updateServer(config)
+// const updateServer = require('./update-server/index.js')
+// updateServer(config)
 
-setInterval(() => {
-    console.log("\nLooking for new server version...")
-    updateServer(config)
-}, 30 * MS_IN_MIN)
+// setInterval(() => {
+//     console.log("\nLooking for new server version...")
+//     updateServer(config)
+// }, 30 * MS_IN_MIN)
 
 const uiConfig = config.ui;
 if ((uiConfig || {}).enabled) {
@@ -313,8 +313,7 @@ if ((uiConfig || {}).enabled) {
         if (clientHashIsValid(req.header("Authorization"))) {
             const currentVersion = config['minecraft-server-version']
             if(body.version != currentVersion) {
-                console.warn('New bedrock server version available');
-                console.warn(body);
+                console.log('\nNew bedrock server version available: ' + body.version);
                 config['minecraft-server-version'] = body.version
                 fs.writeFileSync('./config.json', JSON.stringify(config, null, 2))
                 execSync('pm2 restart mc-server')
