@@ -14,6 +14,6 @@ res = requests.get(url, headers=headers)
 html = BS(res.text, features="html.parser")
 link = html.find(class_='downloadlink')['href']
 
-bedrock_server_version = re.search('\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}', link).group()
+bedrock_server_version = re.search(r'\d+\.\d+\.\d+\.\d+', link).group()
 
 print(bedrock_server_version)

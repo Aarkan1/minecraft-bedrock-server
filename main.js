@@ -113,14 +113,13 @@ let salt = crypto
     .toString("hex")
     .toUpperCase();
 
-import('./update-server/index.js').then(getServerVersion => {
-    const updateServer = async () => {
-        console.log("\nLooking for new server version...\n")
-        getServerVersion.version(config);
-    }
-    
-    setInterval(updateServer, 30 * MS_IN_MIN)
-})
+const updateServer = require('./update-server/index.js')
+updateServer(config)
+
+setInterval(() => {
+    console.log("\nLooking for new server version...")
+    updateServer(config)
+}, 30 * MS_IN_MIN)
 
 const uiConfig = config.ui;
 if ((uiConfig || {}).enabled) {
@@ -205,20 +204,10 @@ if ((uiConfig || {}).enabled) {
     });
 
     router.post("/trigger-manual-version-update", (req, res) => {
-        const {
-            body
-        } = req;
-        const {
-            adminCodeHash
-        } = {
-            body
-        };
         setTimeout(() => {
             if (clientHashIsValid(req.header("Authorization"))) {
-                import('./update-server/index.js').then(getServerVersion => {
-                    console.log("\nLooking for new server version...\n")
-                    getServerVersion.version(config);
-                })
+                console.log("\nLooking for new server version...")
+                updateServer(config)
                 res.sendStatus(200);
             } else {
                 console.log(
