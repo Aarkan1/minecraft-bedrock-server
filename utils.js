@@ -3,7 +3,7 @@ const os = require('os');
 const CONFIG_FILE_PATH = './config.json'
 const cjson = require(CONFIG_FILE_PATH);
 
-
+const TEST_RESULT =  `${cjson['test']}`;
 const UNZIPPED_SERVER_FOLDER_NAME = `bedrock-server-${cjson['minecraft-server-version']}`;
 const UNZIPPED_SERVERS_CONTAINER = './servers'
 const UNZIPPED_SERVER_FOLDER_PATH = `${UNZIPPED_SERVERS_CONTAINER}/${UNZIPPED_SERVER_FOLDER_NAME}`;
@@ -72,6 +72,7 @@ function formatBytes(a, b = 3) {
 
 
 module.exports = {
+  TEST_RESULT,
   CONFIG_FILE_PATH,
   UNZIPPED_SERVERS_CONTAINER,
   UNZIPPED_SERVER_FOLDER_NAME,

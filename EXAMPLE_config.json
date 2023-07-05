@@ -4,7 +4,6 @@
 // each of the fields in "server-properties" do
 //
 // Delete all the lines not below this one
-
 {
   "accept-official-minecraft-server-eula": false,
   "minecraft-server-version": "1.19.1.01",
