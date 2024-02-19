@@ -379,15 +379,15 @@ downloadServerIfNotExists(platform)
                     );
                 });
 
-                bs.stdout.on("data", async data => {
+                async function handleServerOutputData(data) {
                     if (
-                        /^(A previous save has not been completed\.|Saving\.\.\.|Changes to the level are resumed\.)/i.test(
+                        /^.*] (A previous save has not been completed\.|Saving\.\.\.|Changes to the level are resumed\.)/i.test(
                             data
                         )
                     ) {
                         // do nothing
                     } else if (
-                        /^(Data saved\. Files are now ready to be copied\.)/i.test(
+                        /^.*] (Data saved\. Files are now ready to be copied\.)/i.test(
                             data
                         )
                     ) {
@@ -420,7 +420,6 @@ downloadServerIfNotExists(platform)
                         if (hasSentStopCommand) {
                             clearInterval(saveQueryInterval);
                             clearInterval(saveHoldInterval);
-                            clearInterval(dailyBackupInterval);
                             bs.stdin.write("stop\r\n");
                             setTimeout(async () => {
                                 await deleteLockFileIfExists();
@@ -428,9 +427,32 @@ downloadServerIfNotExists(platform)
                             }, MS_IN_SEC);
                         }
                     } else {
-                        console.log(`${data.toString().replace(/\n$/, "")}`);
+                      console.log(`[Raw Bedrock Server Output]${data.toString().replace(/$/, "")}`);
                     }
-                });
+                }
+
+                // Microsoft made an annoying change and now listening for the data is super inconsistent. To deal with this we need to reassemble the data into a buffer.
+                let lineBuffer = "";
+                bs.stdout.on("data", async function(data) {
+                   lineBuffer += data.toString();
+
+                   const shouldIngest2Lines =   /^.*] (Data saved\. Files are now ready to be copied\.)/i.test(
+                         lineBuffer
+                     ); // Microsoft made another annoying change and split this info into 2 lines - to deal with this, wait for 2 lines if we hit the 'Data saved...' message and reassemble
+                   let lines = lineBuffer.split("\n");
+
+                   if (!shouldIngest2Lines) {
+                     if (lines.length > 1) {
+                         await handleServerOutputData(lines[0]); // standard case
+                         lineBuffer = lines[1];
+                     }
+                  } else {
+                      if (lines.length > 2) {
+                          await handleServerOutputData(lines[0] + lines[1]);
+                          lineBuffer = lines[2];
+                      }
+                  }
+               });
             };
 
             if (platform === "linux" || platform === 'win32') {
